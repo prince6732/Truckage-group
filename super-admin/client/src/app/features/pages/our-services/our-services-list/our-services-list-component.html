@@ -1,0 +1,218 @@
+<app-breadcrumb-component [items]="breadcrumbItems"></app-breadcrumb-component>
+
+<div class="space-y-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 px-6 py-5">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <h2 class="text-2xl font-bold text-gray-800">Our Services</h2>
+      <div
+        class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+      >
+        <input
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          type="search"
+          placeholder="Search"
+          class="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all w-full sm:w-64"
+        />
+        <button
+          (click)="openModal()"
+          class="bg-linear-to-r cursor-pointer from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <lucide-icon [img]="Plus" [size]="20"></lucide-icon>
+          Add New Service
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+  >
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              S.No.
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Title
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Subtitle
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Description
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Button 1 Text
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Button 2 Text
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Image
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (ourService of ourServices(); track ourService.id; let i =
+          $index) {
+          <tr class="hover:bg-blue-50 transition-colors group">
+            <td class="px-6 py-4 text-sm font-medium text-gray-900">
+              {{ (currentPage() - 1) * pageSize() + i + 1 }} .
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+              {{ ourService.title }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+              {{ ourService.subtitle ? ourService.subtitle : '-' }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-900">
+              {{ ourService.description }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600 capitalize">
+              {{ ourService.button1_text }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600 capitalize">
+              {{ ourService.button2_text }}
+            </td>
+            <td class="px-6 py-4">
+              @if (ourService.image) {
+              <img
+                [src]="imageUrl + ourService.image"
+                alt="Service image"
+                class="w-16 h-16 object-cover rounded-lg border border-gray-200"
+              />
+              } @else {
+              <span class="text-gray-400 text-sm">No image</span>
+              }
+            </td>
+            <td class="px-6 py-4">
+              <span
+                class="inline-flex px-3 py-1 text-xs font-semibold rounded-full"
+                [ngClass]="{
+                                        'bg-green-100 text-green-800': ourService.status,
+                                        'bg-red-100 text-red-800': !ourService.status
+                                    }"
+              >
+                {{ ourService.status ? "Active" : "Inactive" }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <button
+                  (click)="openDetailsModal($event, ourService)"
+                  class="text-green-600 cursor-pointer hover:text-green-800 font-medium text-sm transition-colors"
+                  title="See Details"
+                >
+                  <lucide-icon [img]="Info" [size]="20"></lucide-icon>
+                </button>
+                <button
+                  (click)="openEditModal($event, ourService)"
+                  class="text-blue-600 cursor-pointer hover:text-blue-800 font-medium text-sm transition-colors"
+                  title="Edit Service"
+                >
+                  <lucide-icon [img]="Edit" [size]="20"></lucide-icon>
+                </button>
+                <button
+                  (click)="confirmDelete($event, ourService.id)"
+                  class="text-red-600 cursor-pointer hover:text-red-800 font-medium text-sm transition-colors"
+                  title="Delete Service"
+                >
+                  <lucide-icon [img]="Trash2" [size]="20"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (ourServices().length > 0) {
+    <div class="px-6 py-4 border-t border-gray-200">
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        [total]="totalItems()"
+        [pageSize]="pageSize()"
+        (pageChange)="onPageChange($event)"
+      >
+      </app-pagination>
+    </div>
+    } @if (ourServices().length === 0) {
+    <div class="flex flex-col items-center justify-center py-16">
+      <lucide-icon
+        [img]="CreditCard"
+        [size]="64"
+        class="text-gray-400 mb-4"
+      ></lucide-icon>
+      <h3 class="text-lg font-semibold text-gray-700 mb-1">
+        No Services Found
+      </h3>
+      <p class="text-sm text-gray-500">
+        Create your first service to get started.
+      </p>
+    </div>
+    }
+  </div>
+</div>
+
+@if (showCompletionModal()) {
+<app-modal
+  [isOpen]="showCompletionModal()"
+  [title]="editModal() ? 'Edit Service' : 'Create New Service'"
+  [width]="'max-w-2xl'"
+  (close)="closeModal(true)"
+>
+  <app-our-services-form-component
+    [data]="editModal()"
+    (panelClosed)="closeModal($event)"
+  ></app-our-services-form-component>
+</app-modal>
+}
+
+<app-confirmation-modal
+  [isOpen]="showDeleteModal()"
+  [title]="'Delete Service'"
+  [message]="'Are you sure you want to delete this service? This action cannot be undone.'"
+  [type]="'danger'"
+  [confirmText]="'Delete'"
+  [cancelText]="'Cancel'"
+  (confirmed)="deleteOurService()"
+  (cancelled)="cancelDelete()"
+>
+</app-confirmation-modal>
+
+<app-our-services-details-component
+  [isOpen]="isDetailsModalOpen()"
+  [item]="selectedItem()"
+  (close)="closeDetailsModal()"
+></app-our-services-details-component>

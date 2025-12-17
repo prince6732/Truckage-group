@@ -1,0 +1,33 @@
+@if (isOpen) {
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto py-10 px-4"
+>
+  <div
+    class="fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
+    (click)="closeModal()"
+  ></div>
+
+  <div
+    class="w-full {{
+      width
+    }} bg-white rounded-2xl shadow-xl p-6 relative transition-all duration-300"
+    (click)="$event.stopPropagation()"
+  >
+    <button
+      type="button"
+      title="close"
+      (click)="closeModal()"
+      class="absolute top-5 right-5 cursor-pointer text-black hover:text-red-400 text-4xl"
+      aria-label="Close modal"
+    >
+      <lucide-icon [img]="X" [size]="24"></lucide-icon>
+    </button>
+
+    <h2 class="text-xl font-semibold mb-4 text-black">{{ title }}</h2>
+
+    <div class="overflow-y-auto scrollbar max-h-[70vh]">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+}

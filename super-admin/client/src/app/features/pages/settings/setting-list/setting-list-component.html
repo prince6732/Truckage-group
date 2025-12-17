@@ -1,0 +1,173 @@
+<app-breadcrumb-component [items]="breadcrumbItems"></app-breadcrumb-component>
+
+<div class="space-y-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 px-6 py-5">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <h2 class="text-2xl font-bold text-gray-800">Settings</h2>
+      <div
+        class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+      >
+        <input
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+          type="search"
+          placeholder="Search settings..."
+          class="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all w-full sm:w-64"
+        />
+        <button
+          (click)="openModal()"
+          class="bg-linear-to-r cursor-pointer from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <lucide-icon [img]="Plus" [size]="20"></lucide-icon>
+          Add Setting
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+  >
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              S.No.
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Key
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Value
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (setting of settings(); track setting.key; let i = $index) {
+          <tr class="hover:bg-blue-50 transition-colors cursor-pointer group">
+            <td class="px-6 py-4 text-sm font-medium text-gray-900">
+              {{ (currentPage() - 1) * pageSize() + i + 1 }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+              {{ setting.key }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600">{{ setting.value }}</td>
+            <td class="px-6 py-4">
+              <span
+                class="inline-flex px-3 py-1 text-xs font-semibold rounded-full"
+                [ngClass]="{
+                                        'bg-green-100 text-green-800': setting.status,
+                                        'bg-red-100 text-red-800': !setting.status
+                                    }"
+              >
+                {{ setting.status ? "Active" : "Inactive" }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <button
+                  (click)="openEditModal($event, setting)"
+                  class="text-blue-600 cursor-pointer hover:text-blue-800 font-medium text-sm transition-colors"
+                  title="Edit Setting"
+                >
+                  <lucide-icon [img]="Edit" [size]="20"></lucide-icon>
+                </button>
+                <button
+                  (click)="confirmDelete($event, setting.key)"
+                  class="text-red-600 cursor-pointer hover:text-red-800 font-medium text-sm transition-colors"
+                  title="Delete Setting"
+                >
+                  <lucide-icon [img]="Trash2" [size]="20"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (settings().length === 0) {
+    <div class="flex flex-col items-center justify-center py-16">
+      <lucide-icon
+        [img]="Frown"
+        [size]="64"
+        class="text-gray-400 mb-4"
+      ></lucide-icon>
+      <h3 class="text-lg font-semibold text-gray-700 mb-1">
+        No Settings Found
+      </h3>
+      <p class="text-sm text-gray-500">
+        Try adjusting your search or add a new setting.
+      </p>
+    </div>
+    } @if (settings().length > 0) {
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      [total]="totalItems()"
+      [pageSize]="pageSize()"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+    }
+  </div>
+</div>
+
+@if (showCompletionModal()) {
+<div
+  class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-115 p-4"
+>
+  <div class="absolute inset-0" (click)="closeModal(true)"></div>
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+    <div
+      class="flex items-center justify-between px-6 py-4 border-b border-gray-200"
+    >
+      <h3 class="text-xl font-bold text-gray-800">
+        {{ editModal() ? "Edit Setting" : "Create New Setting" }}
+      </h3>
+      <button
+        (click)="closeModal(true)"
+        class="text-gray-400 cursor-pointer hover:text-gray-600 transition-colors"
+      >
+        <lucide-icon [img]="X" [size]="24"></lucide-icon>
+      </button>
+    </div>
+    <div class="p-6">
+      <app-setting-form-component
+        [data]="editModal()"
+        (panelClosed)="closeModal($event)"
+      ></app-setting-form-component>
+    </div>
+  </div>
+</div>
+}
+
+<app-confirmation-modal
+  [isOpen]="showDeleteModal()"
+  [title]="'Delete Setting'"
+  [message]="'Are you sure you want to delete this setting? This action cannot be undone.'"
+  [type]="'danger'"
+  [confirmText]="'Delete'"
+  [cancelText]="'Cancel'"
+  (confirmed)="deleteSetting()"
+  (cancelled)="cancelDelete()"
+></app-confirmation-modal>

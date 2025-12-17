@@ -1,0 +1,110 @@
+<app-modal
+  [isOpen]="isOpen"
+  [title]="'Services Details'"
+  [width]="'max-w-3xl'"
+  (close)="close.emit()"
+>
+  <div class="space-y-8 text-gray-800">
+    <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+      <h3 class="text-lg font-semibold flex items-center gap-2">Title</h3>
+      <p class="text-gray-700 mt-1">{{ item?.title }}</p>
+    </div>
+
+    <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+      <h3 class="text-lg font-semibold flex items-center gap-2">Description</h3>
+      <p class="mt-2 leading-relaxed text-gray-700">{{ item?.description }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+        <h3 class="text-lg font-semibold flex items-center gap-2">Button 1</h3>
+        <p class="mt-2">
+          <span class="font-medium">Text:</span> {{ item?.button1_text }}
+        </p>
+        <p class="mt-1">
+          <span class="font-medium">Link:</span>
+          <a
+            [href]="item?.button1_url"
+            target="_blank"
+            class="text-blue-600 underline break-all"
+          >
+            {{ item?.button1_url }}
+          </a>
+        </p>
+      </div>
+
+      <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+        <h3 class="text-lg font-semibold flex items-center gap-2">Button 2</h3>
+        <p class="mt-2">
+          <span class="font-medium">Text:</span> {{ item?.button2_text }}
+        </p>
+        <p class="mt-1">
+          <span class="font-medium">Link:</span>
+          <a
+            [href]="item?.button2_url"
+            target="_blank"
+            class="text-blue-600 underline break-all"
+          >
+            {{ item?.button2_url }}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200 flex items-center gap-3"
+    >
+      <span class="text-lg font-semibold flex items-center gap-2">Status</span>
+      <span
+        class="px-3 py-1 text-sm font-semibold rounded-full"
+        [ngClass]="{
+          'bg-green-100 text-green-700': item?.status,
+          'bg-red-100 text-red-700': !item?.status
+        }"
+      >
+        {{ item?.status ? 'Active' : 'Inactive' }}
+      </span>
+    </div>
+
+    <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+      <h3 class="text-lg font-semibold flex items-center gap-2 mb-3">
+        Image Preview
+      </h3>
+
+      @if (item?.image) {
+      <img
+        [src]="imageUrl + item?.image"
+        class="w-60 rounded-xl border shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+      />
+      } @else {
+      <p class="text-gray-400 italic">No image uploaded</p>
+      }
+    </div>
+
+    <div class="bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-200">
+      <h3 class="text-lg font-semibold flex items-center gap-2 mb-3">
+        Additional Images
+      </h3>
+
+      <ng-container
+        *ngIf="item?.additional_images as additionalImages; else noAdditional"
+      >
+        <div *ngIf="additionalImages.length > 0; else noAdditional">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <ng-container *ngFor="let img of additionalImages">
+              <img
+                [src]="imageUrl + img"
+                alt="additional image"
+                class="w-full h-32 object-cover rounded-xl border shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+              />
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noAdditional>
+        <p class="text-gray-400 italic">No additional images uploaded</p>
+      </ng-template>
+    </div>
+  </div>
+</app-modal>

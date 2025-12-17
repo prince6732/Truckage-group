@@ -1,0 +1,37 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-linear-to-br from-yellow-50 via-white to-gray-100 px-6 py-12"
+>
+  <div
+    class="bg-white rounded-3xl shadow-2xl border border-gray-100 max-w-lg w-full p-10 text-center transform animate-fade-in"
+  >
+    <div class="flex justify-center mb-6">
+      <lucide-icon
+        [img]="ShieldAlert"
+        class="w-20 h-20 text-yellow-500 drop-shadow-lg"
+      ></lucide-icon>
+    </div>
+
+    <h1
+      class="text-[90px] font-extrabold text-gray-900 leading-none drop-shadow-md"
+    >
+      403
+    </h1>
+
+    <h2 class="text-3xl font-bold text-gray-800 mt-2">Access Forbidden</h2>
+
+    <p class="text-gray-600 mt-3">
+      You don’t have permission to view this page. Please contact your
+      administrator if you believe this is an error.
+    </p>
+
+    <div class="mt-8">
+      <button
+        routerLink="/"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-white font-semibold rounded-xl shadow-md hover:bg-yellow-600 hover:shadow-lg transition-all duration-300 active:scale-95"
+      >
+        <lucide-icon [img]="ArrowLeft" class="w-5 h-5"></lucide-icon>
+        Go Back
+      </button>
+    </div>
+  </div>
+</div>

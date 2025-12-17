@@ -1,0 +1,99 @@
+<aside
+  [class]="'fixed lg:static inset-y-0 left-0 z-30 w-72 bg-white shadow-lg lg:shadow-none transition-all duration-300 ease-in-out transform flex flex-col h-screen ' + (isOpen() ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20')"
+>
+  <div
+    class="flex items-center justify-start h-16 px-6 border-b border-gray-100 shrink-0"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="w-10 h-10 bg-linear-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-md"
+      >
+        <lucide-icon
+          [img]="LayoutDashboard"
+          class="w-6 h-6 text-white"
+        ></lucide-icon>
+      </div>
+      @if (isOpen()) {
+      <span class="text-xl font-bold text-gray-800 tracking-tight"
+        >Transport Admin</span
+      >
+      }
+    </div>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+    @for (item of menuItems; track item.label) {
+    <div>
+      <div
+        (click)="item.children ? toggleMenu(item.label) : onItemClick()"
+        [routerLink]="!item.children ? item.route : null"
+        class="flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-all"
+        [ngClass]="{
+            'bg-blue-600 text-white': activeRoute === item.route || isParentActive(item),
+            'hover:bg-blue-50 text-gray-700': activeRoute !== item.route && !isParentActive(item)
+            }"
+      >
+        <div class="flex items-center gap-3">
+          <lucide-icon [img]="item.icon" class="w-5 h-5"></lucide-icon>
+          @if (isOpen()) {
+          <span class="text-sm font-medium">{{ item.label }}</span>
+          }
+        </div>
+
+        @if (item.children && isOpen()) {
+        <lucide-icon
+          [img]="openItems[item.label] ? ChevronDown : ChevronRight"
+          class="w-4 h-4"
+        />
+        }
+      </div>
+
+      @if (item.children && openItems[item.label]) {
+      <div class="ml-8 mt-1 space-y-1 border-l border-gray-200 pl-3">
+        @for (child of item.children; track child.label) { @if
+        (child?.children?.length) {
+        <div>
+          <div
+            (click)="toggleMenu(child.label)"
+            class="flex justify-between items-center px-3 py-2 rounded cursor-pointer hover:bg-blue-50"
+          >
+            <span class="text-sm">{{ child.label }}</span>
+            <lucide-icon
+              [img]="openItems[child.label] ? ChevronDown : ChevronRight"
+              class="w-4 h-4"
+            />
+          </div>
+
+          @if (openItems[child.label]) {
+          <div class="ml-6 mt-1 space-y-1">
+            @for (nested of child.children!; track nested.label) {
+            <a
+              [routerLink]="nested.route"
+              (click)="onItemClick()"
+              class="block px-3 py-2 text-sm rounded hover:bg-blue-50"
+            >
+              {{ nested.label }}
+            </a>
+            }
+          </div>
+          }
+        </div>
+        } @else {
+        <a
+          [routerLink]="child.route"
+          (click)="onItemClick()"
+          class="block px-4 py-3 text-sm rounded"
+          [ngClass]="{
+          'bg-blue-600 text-white': activeRoute === child.route,
+          'hover:bg-blue-50 text-gray-700': activeRoute !== child.route
+          }"
+        >
+          {{ child.label }}
+        </a>
+        } }
+      </div>
+      }
+    </div>
+    }
+  </nav>
+</aside>

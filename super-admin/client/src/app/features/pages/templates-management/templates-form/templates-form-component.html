@@ -1,0 +1,229 @@
+<form
+  [formGroup]="rForm"
+  (ngSubmit)="onSubmit()"
+  class="space-y-5 max-h-[70vh] overflow-y-auto pr-2"
+>
+  <div>
+    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+      Title <span class="text-red-600">*</span>
+    </label>
+    <input
+      id="title"
+      formControlName="title"
+      type="text"
+      placeholder="Enter title"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+    />
+    <input-validation-error-message
+      [control]="rForm.get('title')"
+      fieldName="Title"
+    />
+  </div>
+  <div>
+    <label
+      for="description"
+      class="block text-sm font-semibold text-gray-700 mb-2"
+    >
+      Description
+    </label>
+
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="4"
+      placeholder="Enter detailed description"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
+    ></textarea>
+
+    <input-validation-error-message
+      [control]="rForm.get('description')"
+      fieldName="Description"
+    />
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="button1_text"
+        class="block text-sm font-semibold text-gray-700 mb-2"
+      >
+        Button 1 Text
+      </label>
+      <input
+        id="button1_text"
+        formControlName="button1_text"
+        type="text"
+        placeholder="e.g., Get Started"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      />
+      <input-validation-error-message
+        [control]="rForm.get('button1_text')"
+        fieldName="Button 1 Text"
+      />
+    </div>
+    <div>
+      <label
+        for="button1_url"
+        class="block text-sm font-semibold text-gray-700 mb-2"
+      >
+        Button 1 URL
+      </label>
+      <input
+        id="button1_url"
+        formControlName="button1_url"
+        type="url"
+        placeholder="e.g., /contact"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      />
+      <input-validation-error-message
+        [control]="rForm.get('button1_url')"
+        fieldName="Button 1 URL"
+      />
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label
+        for="button2_text"
+        class="block text-sm font-semibold text-gray-700 mb-2"
+      >
+        Button 2 Text
+      </label>
+      <input
+        id="button2_text"
+        formControlName="button2_text"
+        type="text"
+        placeholder="e.g., Learn More"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      />
+      <input-validation-error-message
+        [control]="rForm.get('button2_text')"
+        fieldName="Button 2 Text"
+      />
+    </div>
+    <div>
+      <label
+        for="button2_url"
+        class="block text-sm font-semibold text-gray-700 mb-2"
+      >
+        Button 2 URL
+      </label>
+      <input
+        id="button2_url"
+        formControlName="button2_url"
+        type="url"
+        placeholder="e.g., /about"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+      />
+      <input-validation-error-message
+        [control]="rForm.get('button2_url')"
+        fieldName="Button 2 URL"
+      />
+    </div>
+  </div>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-2">
+      Template Image
+    </label>
+
+    @if (selectedImage()) {
+    <div class="mb-3 relative inline-block">
+      <img
+        [src]="imageUrl + selectedImage()"
+        alt="Template image preview"
+        class="w-full max-w-md h-48 rounded-lg object-cover border-2 border-gray-200 shadow"
+      />
+      <button
+        type="button"
+        (click)="removeImage()"
+        class="absolute top-2 cursor-pointer right-2 bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors shadow-lg"
+      >
+        <lucide-icon [img]="X" class="w-3 h-3"></lucide-icon>
+      </button>
+    </div>
+    }
+
+    <app-image-cropper-modal
+      [buttonLabel]="selectedImage() ? 'Change Image' : 'Select Image'"
+      [directory]="'templates'"
+      [multiple]="false"
+      (onSelect)="onImageSelect($event)"
+      [aspectRatio]="486 / 227"
+    ></app-image-cropper-modal>
+
+    <input-validation-error-message
+      [control]="rForm.get('image')"
+      fieldName="Image"
+    />
+  </div>
+
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-2">
+      Additional Images
+    </label>
+
+    <div class="flex flex-wrap gap-3 mb-3">
+      @for (img of additionalImages(); track $index) {
+      <div class="relative w-32 h-24">
+        <img
+          [src]="imageUrl + img"
+          class="w-full h-full object-cover rounded-lg border shadow"
+        />
+        <button
+          type="button"
+          (click)="removeAdditionalImage($index)"
+          class="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full hover:bg-red-700 shadow"
+        >
+          <lucide-icon [img]="X" class="w-3 h-3"></lucide-icon>
+        </button>
+      </div>
+      }
+    </div>
+
+    <app-image-cropper-modal
+      buttonLabel="Add Additional Images"
+      [directory]="'templates'"
+      [multiple]="true"
+      (onSelect)="onAdditionalImagesSelect($event)"
+      [aspectRatio]="486 / 227"
+    ></app-image-cropper-modal>
+
+    <input-validation-error-message
+      [control]="rForm.get('additional_images')"
+      fieldName="Additional Images"
+    />
+  </div>
+
+  <div
+    class="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer select-none"
+    (click)="toggleStatus()"
+  >
+    <label class="text-sm cursor-pointer font-medium text-gray-700">
+      Active Status
+    </label>
+    <app-toggle-switch formControlName="status"></app-toggle-switch>
+  </div>
+
+  <div class="flex gap-3 pt-2">
+    <button
+      type="button"
+      (click)="rForm.reset()"
+      class="flex-1 py-3 px-4 cursor-pointer bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+    >
+      Reset
+    </button>
+    <button
+      type="button"
+      (click)="closeModal(false)"
+      class="flex-1 py-3 px-4 cursor-pointer bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="flex-1 py-3 px-4 cursor-pointer bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
+    >
+      {{ data() ? 'Update' : 'Create' }}
+    </button>
+  </div>
+</form>
