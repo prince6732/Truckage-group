@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import "tailwindcss";
+
+html {
+  font-size: clamp(14px, 9px + 0.4vw, 16px) !important;
+  scroll-behavior: smooth;
+}
+
+@theme inline {
+  --font-body: "Josefin Sans", sans-serif !important;
+  --color-gc-300: #8c8c8c;
+  --color-gc-600: #2b2b2b;
+  --color-gc-900: #1c1c1c;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #05b45d; /* main brand color */
+  --primary-foreground: #ffffff;
+  --primary-light: #26c57f;
+  --primary-dark: #048e4f;
+  --secondary: #ecfff6;
+  --secondary-foreground: #05b45d;
+  --accent: #bff3de;
+  --accent-foreground: #053826;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --ring: #05b45d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #06c66a;
+    --primary-foreground: #ffffff;
+    --primary-light: #33e39b;
+    --primary-dark: #048e54;
+    --secondary: #053826;
+    --secondary-foreground: #dff8ec;
+    --accent: #0f8f66;
+    --accent-foreground: #dff8ec;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #334155;
+    --ring: #06c66a;
+  }
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+@layer utilities {
+  .scrollHide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollHide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    @apply size-2.5 mx-5 cursor-pointer;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply rounded-3xl bg-white/30 cursor-pointer;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gc-900/60 rounded-2xl border-2 border-gc-300/30 cursor-pointer;
+  }
+}
+
+.container {
+  @apply !max-w-[1536px] !mx-auto !px-4;
+}
+
+@media (max-width: 1023.98px) {
+  html {
+    font-size: clamp(13px, 9px + 0.4vw, 16px) !important;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.fade-up-delay-1 {
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.fade-up-delay-2 {
+  animation: fadeUp 1s ease forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes badgeBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.badge-animate:hover {
+  animation: badgeBounce 0.4s ease-in-out;
+}
+
